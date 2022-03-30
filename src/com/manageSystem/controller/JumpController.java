@@ -28,6 +28,8 @@ import java.util.Scanner;
 
 public class JumpController {
 
+    private static boolean isAuth = false;
+
     /**
      * 导入Scanner 支持终端输入
      */
@@ -123,8 +125,15 @@ public class JumpController {
     public void pageControl() {
 
         int index;
+
         List<Menu> mainMenu = backstageManageService.getMainMenu();
-        for (Menu menu : mainMenu) System.out.println(menu.getMenuName());
+
+        if (isAuth) {
+            backstageManageService.getMainMenu().get(0).setExecuteAction(null);
+            mainMenu = mainMenu.get(0).getMainMenu();
+            for (Menu menu : mainMenu) System.out.println(menu.getMenuName());
+        }
+        else for (Menu menu : mainMenu) System.out.println(menu.getMenuName());
 
         while (mainMenu.get(index = in.nextInt()-1).getExecuteAction() == null) {
             mainMenu = mainMenu.get(index).getMainMenu();
@@ -170,6 +179,7 @@ public class JumpController {
                 System.out.println(getAccountsPage());
                 break;
             case 0014:
+                isAuth = false;
                 pageControl();
                 break;
             case 0002:
@@ -185,7 +195,7 @@ public class JumpController {
                     username = in.next();
                     System.out.print("密码:");
                 }
-                backstageManageService.getMainMenu().get(0).setExecuteAction(null);
+                isAuth = true;
                 pageControl();
                 break;
             default:

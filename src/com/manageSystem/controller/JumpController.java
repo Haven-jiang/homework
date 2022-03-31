@@ -52,14 +52,30 @@ public class JumpController {
 
     PageObtainService pageObtainService = new PageObtainServiceImpl();
 
+    /**
+     * 无参构造
+     */
+
     public JumpController() {
     }
+
+    /**
+     * 全参构造
+     * @param backstageManageService
+     * @param pageObtainService
+     */
 
     public JumpController(BackstageManageService backstageManageService, PageObtainService pageObtainService) {
         this.backstageManageService = backstageManageService;
         this.pageObtainService = pageObtainService;
     }
 
+    /**
+     * 登录逻辑
+     * @param username
+     * @param password
+     * @return
+     */
 
     public boolean toLogin(String username, String password) {
         for (User user : backstageManageService.queryUserAll())
@@ -81,7 +97,13 @@ public class JumpController {
         return responseString;
     }
 
-    public String queryUserByName(String name) {
+    /**
+     * 查询 User Intro 通过 username
+     * @param name
+     * @return
+     */
+
+    public String queryUserIntroByName(String name) {
         String responseString = name + "'s intro is: ";
         for (User user : backstageManageService.queryUserByUsername(name)) {
             responseString += user.getIntro() + '\n';
@@ -89,10 +111,25 @@ public class JumpController {
         return responseString;
     }
 
+    /**
+     *
+     * @param name
+     * @param password
+     * @return
+     */
+
     public String insertUser(String name, String password) {
         if(backstageManageService.insertUser(new User(name, password))) return "添加成功";
         return "添加失败";
     }
+
+    /**
+     *
+     * @param name
+     * @param password
+     * @param intro
+     * @return
+     */
 
     public String insertUserIntro(String name, String password, String intro) {
         if(backstageManageService.insertUser(new User(name, password, intro))) return "添加成功";
@@ -109,25 +146,49 @@ public class JumpController {
         return "删除失败";
     }
 
+    /**
+     *
+     * @return
+     */
+
     public String getLuckyBroadcastPage() {
         Page page = new Page("LuckyBroadcast", pageObtainService.luckyBroadcasting());
         return page.toString();
     }
+
+    /**
+     *
+     * @return
+     */
 
     public String getLuckyDrawPage() {
         Page page = new Page("LuckyDraw", pageObtainService.luckyDraw());
         return page.toString();
     }
 
+    /**
+     *
+     * @return
+     */
+
     public String getBirthGreetPage() {
         Page page = new Page("BirthGreet", pageObtainService.birthGreet());
         return page.toString();
     }
 
+    /**
+     *
+     * @return
+     */
+
     public String getAccountsPage() {
         Page page = new Page("Settle Accounts", "已成功结账");
         return page.toString();
     }
+
+    /**
+     * 页面控制
+     */
 
     public void pageControl() {
 
@@ -167,7 +228,7 @@ public class JumpController {
                 break;
             case 0114:
                 System.out.print("请输入要查询的username:");
-                System.out.println(queryUserByName(in.next()));
+                System.out.println(queryUserIntroByName(in.next()));
                 pageControl();
                 break;
             case 0331:

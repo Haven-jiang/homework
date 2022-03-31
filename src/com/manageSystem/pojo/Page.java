@@ -40,6 +40,6 @@ public class Page {
 
     @Override
     public String toString() {
-        return pageName + "\n\n\n" + content;
+        return "\n" + pageName + "\n\n\n\n\n\n\n\n\n\n\n\n\n" + content + "\n";
     }
 }

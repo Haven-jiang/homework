@@ -1,10 +1,14 @@
 package com.manageSystem.controller;
 
+import com.manageSystem.config.SecurityConfig;
 import com.manageSystem.pojo.Menu;
 import com.manageSystem.pojo.Page;
 import com.manageSystem.pojo.User;
 import com.manageSystem.service.BackstageManageService;
 import com.manageSystem.service.PageObtainService;
+import com.manageSystem.service.impl.BackstageManageServiceImpl;
+import com.manageSystem.service.impl.PageObtainServiceImpl;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -28,7 +32,7 @@ import java.util.Scanner;
 
 public class JumpController {
 
-    private static boolean isAuth = false;
+//    private static boolean isAuth = false;
 
     /**
      * 导入Scanner 支持终端输入
@@ -40,13 +44,16 @@ public class JumpController {
      * 导入BackstageManageService层
      */
 
-    BackstageManageService backstageManageService;
+    BackstageManageService backstageManageService = new BackstageManageServiceImpl();
 
     /**
      * 导入PageObtainService层
      */
 
-    PageObtainService pageObtainService;
+    PageObtainService pageObtainService = new PageObtainServiceImpl();
+
+    public JumpController() {
+    }
 
     public JumpController(BackstageManageService backstageManageService, PageObtainService pageObtainService) {
         this.backstageManageService = backstageManageService;
@@ -75,9 +82,9 @@ public class JumpController {
     }
 
     public String queryUserByName(String name) {
-        String responseString = "";
+        String responseString = name + "'s intro is: ";
         for (User user : backstageManageService.queryUserByUsername(name)) {
-            responseString += user.toString() + '\n';
+            responseString += user.getIntro() + '\n';
         }
         return responseString;
     }
@@ -126,14 +133,7 @@ public class JumpController {
 
         int index;
 
-        List<Menu> mainMenu = backstageManageService.getMainMenu();
-
-        if (isAuth) {
-            backstageManageService.getMainMenu().get(0).setExecuteAction(null);
-            mainMenu = mainMenu.get(0).getMainMenu();
-            for (Menu menu : mainMenu) System.out.println(menu.getMenuName());
-        }
-        else for (Menu menu : mainMenu) System.out.println(menu.getMenuName());
+        List<Menu> mainMenu = SecurityConfig.loginFilter(backstageManageService);
 
         while (mainMenu.get(index = in.nextInt()-1).getExecuteAction() == null) {
             mainMenu = mainMenu.get(index).getMainMenu();
@@ -142,12 +142,14 @@ public class JumpController {
         switch (mainMenu.get(index).getExecuteAction()) {
             case 0111:
                 System.out.println(queryUserAll());
+                pageControl();
                 break;
             case 0112:
                 System.out.print("输入username:");
                 String username = in.next();
                 System.out.print("输入password:");
                 System.out.println(insertUser(username, in.next()));
+                pageControl();
                 break;
             case 0113:
                 index = 0;
@@ -161,25 +163,31 @@ public class JumpController {
                 user.setPassword(in.next());
                 user.setIntro(in.next());
                 System.out.println(updateUser(user));
+                pageControl();
                 break;
             case 0114:
                 System.out.print("请输入要查询的username:");
                 System.out.println(queryUserByName(in.next()));
+                pageControl();
                 break;
             case 0331:
                 System.out.println(getLuckyBroadcastPage());
+                pageControl();
                 break;
             case 0332:
                 System.out.println(getLuckyDrawPage());
+                pageControl();
                 break;
             case 0333:
                 System.out.println(getBirthGreetPage());
+                pageControl();
                 break;
             case 0012:
                 System.out.println(getAccountsPage());
+                pageControl();
                 break;
             case 0014:
-                isAuth = false;
+                SecurityConfig.setIsAuth(false);
                 pageControl();
                 break;
             case 0002:
@@ -195,7 +203,7 @@ public class JumpController {
                     username = in.next();
                     System.out.print("密码:");
                 }
-                isAuth = true;
+                SecurityConfig.setIsAuth(true);
                 pageControl();
                 break;
             default:

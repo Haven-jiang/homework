@@ -18,27 +18,27 @@ public class BackstageMapper {
      * @return mainMenu 模拟数据库拿菜单值
      */
     private List<Menu> initMenu() {
-        List<Menu> menus1 = Arrays.asList(
+        List<Menu> menus1 = new ArrayList<>(Arrays.asList(
                 new Menu("1.显示所有客户信息", 0111),
                 new Menu("2.添加客户信息", 0112),
                 new Menu("3.修改客户信息", 0113),
                 new Menu("4.查询客户信息", 0114)
-        );
-        List<Menu> menus2 = Arrays.asList(
+        ));
+        List<Menu> menus2 = new ArrayList<>(Arrays.asList(
                 new Menu("1.幸运大放送",0331),
                 new Menu("2.幸运抽奖", 0332),
                 new Menu("3.生日问候", 0333)
-        );
-        List<Menu> menus3 = Arrays.asList(
+        ));
+        List<Menu> menus3 = new ArrayList<>(Arrays.asList(
                 new Menu("1.客户信息管理", menus1),
                 new Menu("2.购物结算", 0012),
                 new Menu("3.真情回馈", menus2),
                 new Menu("4.注销", 0014)
-        );
-        List<Menu> mainMenu = Arrays.asList(
+        ));
+        List<Menu> mainMenu = new ArrayList<>(Arrays.asList(
                 new Menu("1.登录系统", 0001, menus3),
                 new Menu("2.退出", 0002)
-        );
+        ));
         return mainMenu;
     }
 
@@ -48,7 +48,7 @@ public class BackstageMapper {
      */
 
     private List<User> initUser() {
-        return Arrays.asList(new User("root", "123456"));
+        return new ArrayList<>(Arrays.asList(new User("root", "123456")));
     }
 
     /**
@@ -73,7 +73,7 @@ public class BackstageMapper {
         List<User> responseUserList = new ArrayList<>();
 
         for (User user1 : userList) {
-            if(user1.getUserid().equals(username)) {
+            if(user1.getUsername().equals(username)) {
                 responseUserList.add(user1);
             }
         }
@@ -107,7 +107,7 @@ public class BackstageMapper {
      */
 
     public boolean insertUser(User user) {
-        return userList.add(user);
+        return this.userList.add(user);
     }
 
     /**

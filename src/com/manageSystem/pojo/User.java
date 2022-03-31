@@ -30,6 +30,9 @@ public class User {
         return sb.toString();
     });
 
+
+//    private boolean isAuth = false;
+
     /**
      * 用户名
      */
